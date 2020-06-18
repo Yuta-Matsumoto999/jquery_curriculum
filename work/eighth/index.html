@@ -42,6 +42,42 @@
       // .offset().top 要素の位置を取得します。
       // .fadeIn() 要素をフェードインさせる。
       // .fadeOut() 要素をフェードアウトさせる。
+
+      $(function (){
+
+        $(window).scroll(function(){　//
+          var windowPosition = $(this).scrollTop();
+          if(windowPosition>100){
+            $('.scrollTopBtn').fadeIn(100);
+          } else{
+            $('.scrollTopBtn').fadeOut(100);
+          }
+        });
+
+        $('.scrollTopBtn').click(function (){
+            $('html,body').animate({scrollTop:0});
+        });
+
+        $('.menu__btn').click(function (){
+          var btnData = $(this).data('scroll-place-type'); //'.menu__btn'のデータ属性を取得　thisにすることでクリックされたボタンのみデータ属性を取得する
+          
+          var titlePosition = $(".contents").find('[data-scroll-place-type="'+btnData+'"]').offset().top;　//findメソッドを使って".contents"のデータ属性を探す。データ属性の値は'.menu__btn'のデータ属性と同じなのでbtnDataを代入する
+                                                                                                          //offsetメソッド.topで位置情報を取得
+          $('html,body').animate({scrollTop:titlePosition});          //その位置情報に画面をanimateでスクロールさせる
+
+          // $('.title').each(function(index,titleElement){　　　               //以下はeach文とif文を使うやり方。
+          //   var titleData = $(titleElement).data('scroll-place-type');
+          //   var titlePosition = $(titleElement).offset().top;               //$('html,body')」は決まり文句でブラウザやモードによって「html」が使われたり「body」が使われたりするから両方指定しとけよ。ってことらしい。
+          //   if(btnData === titleData){
+          //     $('html,body').animate({scrollTop:titlePosition});
+          //   }
+          // });
+
+          // console.log(titlePosition)
+          // console.log(titleData)
+
+        });
+      });
     </script>
   </body>
 </html>

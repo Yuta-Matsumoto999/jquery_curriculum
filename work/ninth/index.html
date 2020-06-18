@@ -42,6 +42,33 @@
       // </li>
       //
       // このテンプレートに取得してきた中身を入れて表示します。
+
+      $.ajax({          //ajaxで非同期処理を開始
+       url: './data.json',  //通信先のurl
+       type: 'GET',       //通信タイプ
+       dataType: 'json',    //返ってくるタイプ
+      })
+      .done(function(data) {　//通信が成功した時の処理
+        console.log(data);
+        var str = "";　//空の変数を用意
+        $.each(data.colorsArray, function (index, e) {   //配列　data.colorsArray　に対しての繰り返し処理
+          console.log(e);
+          var nameValue = (e.colorName);　//配列内のオブジェクトのバリューを取得
+          var colorValue = (e.hexValue);　//配列内のオブジェクトのバリューを取得
+          console.log(nameValue)
+          console.log(colorValue)
+          // 加算代入演算子　 +=   a=a+b
+          //$('.colorList').append('<li class="colorList__item"><p class="colorList__title" style="background-color:'+colorValue+' ;">'+nameValue+'</p></li>')  
+          str += '<li class="colorList__item"><p class="colorList__title" style="background-color:' + colorValue + ' ;">' + nameValue + '</p></li>' //空の変数　str にテンプレートを追加 テンプレートの文字列を７つこの変数に格納する
+        })
+        console.log(str)
+        $('.colorList').html(str); //変数　str に格納された７つの文字列を全て　htmlメソッドでhtmlタグとして変換する
+      });
+
+      //*htmlメソッドは繰り返し処理内では使えない　　htmlメソッドは繰り返し処理の内容を一度全てリセットしてから機能するため最後の処理内容のみに機能する
+      //*appendメソッドは要素の末尾に追加するだけなので繰り返し処理の中で機能する　　それまでの繰り返し処理の内容をリセットせずに追加していくだけ
+
+
     </script>
   </body>
 </html>

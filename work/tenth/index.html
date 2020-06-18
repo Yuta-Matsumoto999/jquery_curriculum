@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UT
+    -8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <title>jQuery</title>
@@ -68,6 +69,100 @@
       //
       //
       //
+
+    $(function (){
+
+      var prevSearchword = "";
+      var page = 1;
+      var searchword = "";
+
+      $('#js-search-button').click(function() {
+          searchword = $('#js-search-word').val();
+          console.log(prevSearchword,searchword);
+          pageReset();
+                    
+          $.ajax({
+            url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+            type: 'GET',
+            datatype: 'json',
+            data: {
+              applicationId: '1019399324990976605',
+              booksGenreId: '001',
+              hits: '20',
+              page: page,
+              keyword: searchword,
+            }
+          })
+
+          .done(function(data) {
+            addList(data);
+          })
+
+          .fail(function(error) {
+            showError(error);
+          })
+        });
+
+        function addList(data){ 
+          console.log (data);
+          $('.datacoment').remove();
+          if (data.hits === 0) {
+            $('.lists').prepend('<div class = "datacoment"></div>');
+            var datacoment = $('.datacoment');
+            datacoment.html('<p class = "message">検索結果が0件でした。<br>キーワードを変えて検索してください。</p>');
+          }
+          else {
+            var list = "";
+            $.each(data.Items,function(i,item) {
+              list += '<li class = "lists__item">' + '<div class="lists__item__inner">' + '<a href="' + item.Item.itemUrl + '"class="lists__item__link" target="_blank">' + '<img src="' + item.Item.largeImageUrl + '" class="lists__item__img" alt="' + item.Item.title + '">' + '<p class="lists__item__detail">作品名：　' + item.Item.title + '</p>' + '<p class="lists__item__detail">作者　：　' + item.Item.author + '</p>' + '<p class="lists__item__detail">出版社：　' + item.Item.publisherName + '</p>' + '</a>' + '</div>' + '</li>'
+            });
+            $('.lists').prepend(list)
+          }
+        };
+
+        function showError(error){
+          var errText = "";
+
+          if (error.status === 400) {
+            errText = '<p class = "message">検索ワードを入力してください。</p>';
+          }
+          else if (error.status === 429) {
+            errText = '<p class = "message">リクエスト数が上限に達した場合のエラーです。<br>しばらく時間を空けてから、ご利用ください。</p>';
+          }
+          else if (error.status === 0) {
+            errText = '<p class = "message">通信出来ませんでした。<br>接続状況を確認してください。</p>';
+          }
+          else {
+            errText = '<p class = "message">予期せぬエラーです。</p>';
+          }
+          $('.lists').empty();
+          $('.lists').prepend('<div class = "datacoment">' + errText + '</div>');
+          prevSearchword = "";
+          page = 1;
+          searchword = "";
+
+        }
+
+        function pageReset(){
+          if (prevSearchword === searchword) {
+            page++;
+          } 
+          else {
+            $('.lists').empty();
+            page = 1;
+            prevSearchword = searchword;
+          }
+          
+        }
+      });
+
+
+
+
+    //同じ検索ワードで検索が行われた場合
+    　//検索ワードを格納する変数を設定
+    　//その変数のワードと同じワードが検索された場合に $('.lists').empty(); を無効にする
+    　//さらに20件を上に表示する＝ $('.lists').prepend(list);
     </script>
   </body>
 </html>

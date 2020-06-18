@@ -26,6 +26,25 @@
       // .keyup() 文字入力後に発火されるイベントです。
       // .replace(/\s+/g,'').length 改行を含まない文字数を取得します。
       // .val() input要素のvalueを取得します。
+
+    $(function (){
+
+      var countMax = 30; //文字数の最大値を定義
+      $('.rest-count').html(countMax);    //htmlメソッド　()内の要素を指定したセクレタに対して追加・書き換えをすることが出来る。変数countMaxをhtmlメソッドでhtml上のクラス名rest-countに置き換えて表示させる
+
+      $('.input').keyup(function(){　//keyupメソッド　キーボードのキーが押され、文字が上がった際に以下の関数を実行する。
+
+          var thisValueLength = $(this).val().replace(/\s+/g,'').length;　//クラス名inputの文字数を取得している　文字数の取得　$(●●●●).text().length; 改行やスペースを文字数に含める　$(●●●●).text().replace(/\s+/g,'').length; 改行やスペースを含めない         
+          var countDown = (countMax)-(thisValueLength);　　               //countMax 30　から　thisValueLength(入力されている文字数)を引いた値を変数countDownと定義
+          $('.rest-count').html(countDown);                              //変数countDownをhtmlメソッドでhtml上のクラス名rest-countに置き換えて表示させる
+  
+          if(countDown < 0){                            //if文　変数countDownが0よりも小さい(マイナスの値になる)時にtrueを返す
+              $('.rest-count').addClass('red');　　　　　//trueの処理　クラスrest-countにクラス属性redを与える
+          } else {
+              $('.rest-count').removeClass('red');     //falseの処理　クラスrest-countからクラス属性redを削除
+          }
+      });
+    });
     </script>
   </body>
 </html>
